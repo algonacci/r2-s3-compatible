@@ -1,0 +1,10 @@
+[project]
+name = "r2-s3-compatible"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "boto3>=1.37.20",
+    "python-dotenv>=1.1.0",
+]
