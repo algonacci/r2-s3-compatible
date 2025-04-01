@@ -12,13 +12,14 @@ const s3Client = new S3Client({
 });
 
 // Baca file lokal yang akan diupload
-const fileContent = fs.readFileSync("data/Rich Dad Poor Dad.jpg");
+const fileContent = fs.readFileSync("data/rich_dad_poor_dad.jpg");
 
-// Siapkan perintah upload
+// Siapkan perintah upload dengan Content-Type
 const uploadParams = {
-  Bucket: "hris-onni", // Ganti dengan nama bucket di R2 Anda
+  Bucket: "terbaru-nih", // Ganti dengan nama bucket di R2 Anda
   Key: "rich_dad_poor_dad.jpg", // Nama file yang akan disimpan di R2
   Body: fileContent,
+  ContentType: "image/jpeg", // Menambahkan Content-Type agar file ditangani sebagai gambar JPEG
 };
 
 const run = async () => {

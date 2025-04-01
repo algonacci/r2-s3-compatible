@@ -1,8 +1,9 @@
-from dotenv import load_dotenv
-import os
-load_dotenv()
 import boto3
+import os
+from dotenv import load_dotenv
 
+# Load environment variables
+load_dotenv()
 
 # Buat sesi boto3
 session = boto3.session.Session()
@@ -15,6 +16,20 @@ s3_client = session.client(
     aws_secret_access_key=os.getenv("STORAGE_SECRET_KEY")
 )
 
-s3_client.upload_file('data/Rich Dad Poor Dad.jpg', 'hris-onni', 'rich_dad_poor_dad.jpg')
+# Path file yang akan diupload
+file_path = 'data/rich_dad_poor_dad.jpg'
 
-print("File berhasil diupload ke R2!")
+# Menentukan ContentType
+content_type = 'image/jpeg'
+
+# Upload file dengan ContentType
+try:
+    s3_client.upload_file(
+        file_path,
+        'test', 
+        'rich_dad_poor_dad.jpg',
+        ExtraArgs={'ContentType': content_type}
+    )
+    print("File berhasil diupload ke R2!")
+except Exception as e:
+    print("Gagal mengupload file:", e)
