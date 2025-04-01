@@ -1,35 +1,34 @@
-import boto3
-import os
+from minio import Minio
 from dotenv import load_dotenv
+import os
 
 # Load environment variables
 load_dotenv()
 
-# Buat sesi boto3
-session = boto3.session.Session()
-
-# Buat client S3 dengan endpoint R2 Cloudflare
-s3_client = session.client(
-    service_name='s3',
-    endpoint_url=os.getenv("ENDPOINT_URL"),
-    aws_access_key_id=os.getenv("STORAGE_ACCESS_KEY"),
-    aws_secret_access_key=os.getenv("STORAGE_SECRET_KEY")
+# Buat client Minio dengan endpoint R2 Cloudflare
+minio_client = Minio(
+    endpoint=os.getenv("ENDPOINT_URL"),  # Misalnya: "https://your-r2-endpoint"
+    access_key=os.getenv("STORAGE_ACCESS_KEY"),
+    secret_key=os.getenv("STORAGE_SECRET_KEY"),
+    secure=True  # Gunakan HTTPS
 )
 
-# Path file yang akan diupload
-file_path = 'data/rich_dad_poor_dad.jpg'
+# Fungsi untuk mengunggah file
+def upload_file(file_path, bucket_name, object_name):
+    try:
+        # Upload file
+        minio_client.fput_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            file_path=file_path,
+        )
+        print(f"File '{file_path}' berhasil diupload ke bucket '{bucket_name}'.")
+    except Exception as e:
+        print("Gagal mengupload file:", e)
 
-# Menentukan ContentType
-content_type = 'image/jpeg'
-
-# Upload file dengan ContentType
-try:
-    s3_client.upload_file(
-        file_path,
-        'test', 
-        'rich_dad_poor_dad.jpg',
-        ExtraArgs={'ContentType': content_type}
-    )
-    print("File berhasil diupload ke R2!")
-except Exception as e:
-    print("Gagal mengupload file:", e)
+# Contoh penggunaan
+upload_file(
+    file_path='data/rich_dad_poor_dad.jpg',
+    bucket_name='terbaru-nih',
+    object_name='rich_dad_poor_dad.jpg',
+)
