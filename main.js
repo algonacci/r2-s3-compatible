@@ -16,8 +16,8 @@ const fileContent = fs.readFileSync("data/rich_dad_poor_dad.jpg");
 
 // Siapkan perintah upload dengan Content-Type
 const uploadParams = {
-  Bucket: "terbaru-nih", // Ganti dengan nama bucket di R2 Anda
-  Key: "rich_dad_poor_dad.jpg", // Nama file yang akan disimpan di R2
+  Bucket: process.env.S3_BUCKET_NAME, // Ganti dengan nama bucket di R2 Anda
+  Key: `${process.env.S3_FOLDER_NAME}/rich_dad_poor_dad.jpg`, // Nama file yang akan disimpan di R2
   Body: fileContent,
   ContentType: "image/jpeg", // Menambahkan Content-Type agar file ditangani sebagai gambar JPEG
 };

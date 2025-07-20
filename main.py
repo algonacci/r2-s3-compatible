@@ -7,9 +7,9 @@ load_dotenv()
 
 # Buat client Minio dengan endpoint R2 Cloudflare
 minio_client = Minio(
-    endpoint=os.getenv("ENDPOINT_URL"),  # Misalnya: "https://your-r2-endpoint"
-    access_key=os.getenv("STORAGE_ACCESS_KEY"),
-    secret_key=os.getenv("STORAGE_SECRET_KEY"),
+    endpoint=os.getenv("S3_ENDPOINT_URL"),  # Misalnya: "https://your-r2-endpoint"
+    access_key=os.getenv("S3_ACCESS_KEY"),
+    secret_key=os.getenv("S3_SECRET_KEY"),
     secure=True  # Gunakan HTTPS
 )
 
@@ -29,6 +29,6 @@ def upload_file(file_path, bucket_name, object_name):
 # Contoh penggunaan
 upload_file(
     file_path='data/rich_dad_poor_dad.jpg',
-    bucket_name='terbaru-nih',
-    object_name='rich_dad_poor_dad.jpg',
+    bucket_name=os.getenv("S3_BUCKET_NAME"),
+    object_name=f'{os.getenv("S3_FOLDER_NAME")}/rich_dad_poor_dad_python.jpg',
 )
