@@ -1,6 +1,7 @@
 from minio import Minio
 from dotenv import load_dotenv
 import os
+import mimetypes
 
 # Load environment variables
 load_dotenv()
@@ -17,10 +18,12 @@ minio_client = Minio(
 def upload_file(file_path, bucket_name, object_name):
     try:
         # Upload file
+        content_type, _ = mimetypes.guess_type(file_path)
         minio_client.fput_object(
             bucket_name=bucket_name,
             object_name=object_name,
             file_path=file_path,
+            content_type=content_type or 'application/octet-stream'
         )
         print(f"File '{file_path}' berhasil diupload ke bucket '{bucket_name}'.")
     except Exception as e:
