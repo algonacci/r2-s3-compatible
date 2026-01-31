@@ -3,11 +3,13 @@ const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const fs = require("fs");
 
 const s3Client = new S3Client({
-  region: "auto", // Gunakan "auto" atau region lain jika diperlukan
-  endpoint: process.env.ENDPOINT_URL, // Ganti dengan endpoint R2 Anda
+  region: "auto",
+  endpoint: process.env.S3_ENDPOINT_URL.startsWith("http")
+    ? process.env.S3_ENDPOINT_URL
+    : `http://${process.env.S3_ENDPOINT_URL}`,
   credentials: {
-    accessKeyId: process.env.STORAGE_ACCESS_KEY,
-    secretAccessKey: process.env.STORAGE_SECRET_KEY,
+    accessKeyId: process.env.S3_ACCESS_KEY,
+    secretAccessKey: process.env.S3_SECRET_KEY,
   },
 });
 

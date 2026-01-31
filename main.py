@@ -11,7 +11,7 @@ minio_client = Minio(
     endpoint=os.getenv("S3_ENDPOINT_URL"),  # Misalnya: "https://your-r2-endpoint"
     access_key=os.getenv("S3_ACCESS_KEY"),
     secret_key=os.getenv("S3_SECRET_KEY"),
-    secure=True  # Gunakan HTTPS
+    secure=False  # Gunakan HTTPS
 )
 
 # Fungsi untuk mengunggah file
