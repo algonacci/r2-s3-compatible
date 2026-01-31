@@ -1,5 +1,6 @@
 require("dotenv").config();
-const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const fs = require("fs");
 
 const s3Client = new S3Client({
@@ -28,6 +29,17 @@ const run = async () => {
   try {
     await s3Client.send(new PutObjectCommand(uploadParams));
     console.log("File berhasil diupload ke R2!");
+
+    // Generate Public URL (Karena bucket sudah public)
+    // Prioritaskan S3_PUBLIC_URL jika ada (untuk custom domain), kalau tidak pakai Endpoint bawaan
+    const rawEndpoint = process.env.S3_PUBLIC_URL || process.env.S3_ENDPOINT_URL;
+    const endpoint = rawEndpoint.startsWith("http") ? rawEndpoint : `http://${rawEndpoint}`;
+
+    // URL format: Endpoint / BucketName / Key
+    const publicUrl = `${endpoint}/${process.env.S3_BUCKET_NAME}/${uploadParams.Key}`;
+
+    console.log("Link akses publik (Permanen):", publicUrl);
+
   } catch (err) {
     console.error("Gagal mengupload file:", err);
   }
